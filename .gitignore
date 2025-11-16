@@ -1,0 +1,12 @@
+# Ignore backup files
+*.dump
+*.tar.gz
+backups/
+
+# Ignore sensitive files
+*.pgpass
+sasl_passwd
+
+# Keep only the script and documentation
+!run_pg_backups.sh
+!README.md
