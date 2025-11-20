@@ -1,0 +1,195 @@
+[2025-11-18 00:28:01] ==========================================
+[2025-11-18 00:28:01] PostgreSQL Backup Script Started
+[2025-11-18 00:28:01] ==========================================
+[2025-11-18 00:28:01] Hostname: DESKTOP-538KG2U
+[2025-11-18 00:28:01] Database: production_db
+[2025-11-18 00:28:01] Backup Directory: /home/raabelgas/Laboratory Exercises/Lab8/backups
+[2025-11-18 00:28:01] PostgreSQL server is accessible and ready
+[2025-11-18 00:28:01] ===== Starting Logical Backup (pg_dump) =====
+[2025-11-18 00:28:01] Database: production_db
+[2025-11-18 00:28:01] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/production_db_2025-11-18-002801.dump
+[2025-11-18 00:28:02] SUCCESS: Logical backup completed successfully
+[2025-11-18 00:28:02] Backup file size: 12K
+[2025-11-18 00:28:02] ===== Starting Physical Base Backup (pg_basebackup) =====
+[2025-11-18 00:28:02] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/pg_base_backup_2025-11-18-002801.tar.gz
+[2025-11-18 00:28:02] SUCCESS: Physical backup completed successfully
+[2025-11-18 00:28:02] Backup file size: 4.1M
+[2025-11-18 00:28:02] All backups completed successfully. Proceeding to cloud upload...
+[2025-11-18 00:28:02] ===== Starting Cloud Upload to Google Drive =====
+[2025-11-18 00:28:02] Remote: gdrive_backups:postgresql_backups
+[2025-11-18 00:28:02] Uploading logical backup: Laboratory
+[2025-11-18 00:28:07] SUCCESS: Logical backup uploaded to Google Drive
+[2025-11-18 00:28:07] Uploading physical backup: Laboratory
+[2025-11-18 00:28:15] SUCCESS: Physical backup uploaded to Google Drive
+[2025-11-18 00:28:15] ===== ALL TASKS COMPLETED SUCCESSFULLY =====
+[2025-11-18 00:28:15] Email notification sent successfully: SUCCESS: PostgreSQL Backup and Upload
+[2025-11-18 00:28:15] Starting cleanup of backups older than 7 days...
+[2025-11-18 00:28:15] Cleanup completed. Removed 0 old backup file(s).
+[2025-11-18 00:28:15] PostgreSQL Backup Script Completed Successfully
+[2025-11-18 00:28:15] ==========================================
+[2025-11-18 00:29:00] ==========================================
+[2025-11-18 00:29:00] PostgreSQL Backup Script Started
+[2025-11-18 00:29:00] ==========================================
+[2025-11-18 00:29:00] Hostname: DESKTOP-538KG2U
+[2025-11-18 00:29:00] Database: production_db
+[2025-11-18 00:29:00] Backup Directory: /home/raabelgas/Laboratory Exercises/Lab8/backups
+[2025-11-18 00:29:00] PostgreSQL server is accessible and ready
+[2025-11-18 00:29:00] ===== Starting Logical Backup (pg_dump) =====
+[2025-11-18 00:29:00] Database: production_db
+[2025-11-18 00:29:00] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/production_db_2025-11-18-002900.dump
+[2025-11-18 00:29:00] SUCCESS: Logical backup completed successfully
+[2025-11-18 00:29:00] Backup file size: 12K
+[2025-11-18 00:29:00] ===== Starting Physical Base Backup (pg_basebackup) =====
+[2025-11-18 00:29:00] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/pg_base_backup_2025-11-18-002900.tar.gz
+[2025-11-18 00:29:01] SUCCESS: Physical backup completed successfully
+[2025-11-18 00:29:01] Backup file size: 4.1M
+[2025-11-18 00:29:01] All backups completed successfully. Proceeding to cloud upload...
+[2025-11-18 00:29:01] ===== Starting Cloud Upload to Google Drive =====
+[2025-11-18 00:29:01] Remote: gdrive_backups:postgresql_backups
+[2025-11-18 00:29:01] Uploading logical backup: Laboratory
+[2025-11-18 00:29:05] SUCCESS: Logical backup uploaded to Google Drive
+[2025-11-18 00:29:05] Uploading physical backup: Laboratory
+[2025-11-18 00:29:12] SUCCESS: Physical backup uploaded to Google Drive
+[2025-11-18 00:29:12] ===== ALL TASKS COMPLETED SUCCESSFULLY =====
+[2025-11-18 00:29:12] Email notification sent successfully: SUCCESS: PostgreSQL Backup and Upload
+[2025-11-18 00:29:12] Starting cleanup of backups older than 7 days...
+[2025-11-18 00:29:12] Cleanup completed. Removed 0 old backup file(s).
+[2025-11-18 00:29:12] PostgreSQL Backup Script Completed Successfully
+[2025-11-18 00:29:12] ==========================================
+[2025-11-18 00:33:00] ==========================================
+[2025-11-18 00:33:00] PostgreSQL Backup Script Started
+[2025-11-18 00:33:00] ==========================================
+[2025-11-18 00:33:00] Hostname: DESKTOP-538KG2U
+[2025-11-18 00:33:00] Database: production_db
+[2025-11-18 00:33:00] Backup Directory: /home/raabelgas/Laboratory Exercises/Lab8/backups
+[2025-11-18 00:33:00] PostgreSQL server is accessible and ready
+[2025-11-18 00:33:00] ===== Starting Logical Backup (pg_dump) =====
+[2025-11-18 00:33:00] Database: production_db
+[2025-11-18 00:33:00] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/production_db_2025-11-18-003300.dump
+[2025-11-18 00:33:00] SUCCESS: Logical backup completed successfully
+[2025-11-18 00:33:00] Backup file size: 12K
+[2025-11-18 00:33:00] ===== Starting Physical Base Backup (pg_basebackup) =====
+[2025-11-18 00:33:00] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/pg_base_backup_2025-11-18-003300.tar.gz
+[2025-11-18 00:33:01] SUCCESS: Physical backup completed successfully
+[2025-11-18 00:33:01] Backup file size: 4.1M
+[2025-11-18 00:33:01] All backups completed successfully. Proceeding to cloud upload...
+[2025-11-18 00:33:01] ===== Starting Cloud Upload to Google Drive =====
+[2025-11-18 00:33:01] Remote: gdrive_backups:postgresql_backups
+[2025-11-18 00:33:01] Uploading logical backup: Laboratory
+[2025-11-18 00:33:05] SUCCESS: Logical backup uploaded to Google Drive
+[2025-11-18 00:33:05] Uploading physical backup: Laboratory
+[2025-11-18 00:33:12] SUCCESS: Physical backup uploaded to Google Drive
+[2025-11-18 00:33:12] ===== ALL TASKS COMPLETED SUCCESSFULLY =====
+[2025-11-18 00:33:12] Email notification sent successfully: SUCCESS: PostgreSQL Backup and Upload
+[2025-11-18 00:33:13] Starting cleanup of backups older than 7 days...
+[2025-11-18 00:33:13] Cleanup completed. Removed 0 old backup file(s).
+[2025-11-18 00:33:13] PostgreSQL Backup Script Completed Successfully
+[2025-11-18 00:33:13] ==========================================
+[2025-11-18 00:36:01] ==========================================
+[2025-11-18 00:36:01] PostgreSQL Backup Script Started
+[2025-11-18 00:36:01] ==========================================
+[2025-11-18 00:36:01] Hostname: DESKTOP-538KG2U
+[2025-11-18 00:36:01] Database: production_db
+[2025-11-18 00:36:01] Backup Directory: /home/raabelgas/Laboratory Exercises/Lab8/backups
+[2025-11-18 00:36:01] PostgreSQL server is accessible and ready
+[2025-11-18 00:36:01] ===== Starting Logical Backup (pg_dump) =====
+[2025-11-18 00:36:01] Database: production_db
+[2025-11-18 00:36:01] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/production_db_2025-11-18-003601.dump
+[2025-11-18 00:36:01] SUCCESS: Logical backup completed successfully
+[2025-11-18 00:36:01] Backup file size: 12K
+[2025-11-18 00:36:01] ===== Starting Physical Base Backup (pg_basebackup) =====
+[2025-11-18 00:36:01] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/pg_base_backup_2025-11-18-003601.tar.gz
+[2025-11-18 00:36:02] SUCCESS: Physical backup completed successfully
+[2025-11-18 00:36:02] Backup file size: 4.1M
+[2025-11-18 00:36:02] All backups completed successfully. Proceeding to cloud upload...
+[2025-11-18 00:36:02] ===== Starting Cloud Upload to Google Drive =====
+[2025-11-18 00:36:02] Remote: gdrive_backups:postgresql_backups
+[2025-11-18 00:36:02] Uploading logical backup: Laboratory
+[2025-11-18 00:36:05] SUCCESS: Logical backup uploaded to Google Drive
+[2025-11-18 00:36:05] Uploading physical backup: Laboratory
+[2025-11-18 00:36:18] SUCCESS: Physical backup uploaded to Google Drive
+[2025-11-18 00:36:18] ===== ALL TASKS COMPLETED SUCCESSFULLY =====
+[2025-11-18 00:36:18] Email notification sent successfully: SUCCESS: PostgreSQL Backup and Upload
+[2025-11-18 00:36:18] Starting cleanup of backups older than 7 days...
+[2025-11-18 00:36:18] Cleanup completed. Removed 0 old backup file(s).
+[2025-11-18 00:36:18] PostgreSQL Backup Script Completed Successfully
+[2025-11-18 00:36:18] ==========================================
+[2025-11-18 01:00:00] ==========================================
+[2025-11-18 01:00:00] PostgreSQL Backup Script Started
+[2025-11-18 01:00:00] ==========================================
+[2025-11-18 01:00:00] Hostname: DESKTOP-538KG2U
+[2025-11-18 01:00:00] Database: production_db
+[2025-11-18 01:00:00] Backup Directory: /home/raabelgas/Laboratory Exercises/Lab8/backups
+[2025-11-18 01:00:00] PostgreSQL server is accessible and ready
+[2025-11-18 01:00:00] ===== Starting Logical Backup (pg_dump) =====
+[2025-11-18 01:00:00] Database: production_db
+[2025-11-18 01:00:00] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/production_db_2025-11-18-010000.dump
+[2025-11-18 01:00:00] SUCCESS: Logical backup completed successfully
+[2025-11-18 01:00:00] Backup file size: 12K
+[2025-11-18 01:00:00] ===== Starting Physical Base Backup (pg_basebackup) =====
+[2025-11-18 01:00:00] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/pg_base_backup_2025-11-18-010000.tar.gz
+[2025-11-18 01:00:02] SUCCESS: Physical backup completed successfully
+[2025-11-18 01:00:02] Backup file size: 4.1M
+[2025-11-18 01:00:02] All backups completed successfully. Proceeding to cloud upload...
+[2025-11-18 01:00:02] ===== Starting Cloud Upload to Google Drive =====
+[2025-11-18 01:00:02] Remote: gdrive_backups:postgresql_backups
+[2025-11-18 01:00:02] Uploading logical backup: Laboratory
+[2025-11-18 01:00:06] SUCCESS: Logical backup uploaded to Google Drive
+[2025-11-18 01:00:06] Uploading physical backup: Laboratory
+[2025-11-18 01:06:01] PostgreSQL Backup Script Started
+[2025-11-18 01:06:01] ==========================================
+[2025-11-18 01:06:01] Hostname: DESKTOP-538KG2U
+[2025-11-18 01:06:01] Database: production_db
+[2025-11-18 01:06:01] Backup Directory: /home/raabelgas/Laboratory Exercises/Lab8/backups
+[2025-11-18 01:06:01] PostgreSQL server is accessible and ready
+[2025-11-18 01:06:01] ===== Starting Logical Backup (pg_dump) =====
+[2025-11-18 01:06:01] Database: production_db
+[2025-11-18 01:06:01] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/production_db_2025-11-18-010601.dump
+[2025-11-18 01:06:02] SUCCESS: Logical backup completed successfully
+[2025-11-18 01:06:02] Backup file size: 12K
+[2025-11-18 01:06:02] ===== Starting Physical Base Backup (pg_basebackup) =====
+[2025-11-18 01:06:02] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/pg_base_backup_2025-11-18-010601.tar.gz
+[2025-11-18 01:06:02] SUCCESS: Physical backup completed successfully
+[2025-11-18 01:06:02] Backup file size: 4.1M
+[2025-11-18 01:06:02] All backups completed successfully. Proceeding to cloud upload...
+[2025-11-18 01:06:02] ===== Starting Cloud Upload to Google Drive =====
+[2025-11-18 01:06:02] Remote: gdrive_backups:postgresql_backups
+[2025-11-18 01:06:02] Uploading logical backup: Laboratory
+[2025-11-18 01:06:07] SUCCESS: Logical backup uploaded to Google Drive
+[2025-11-18 01:06:07] Uploading physical backup: Laboratory
+[2025-11-18 01:06:16] SUCCESS: Physical backup uploaded to Google Drive
+[2025-11-18 01:06:16] ===== ALL TASKS COMPLETED SUCCESSFULLY =====
+[2025-11-18 01:06:16] Email notification sent successfully: SUCCESS: PostgreSQL Backup and Upload
+[2025-11-18 01:06:16] Starting cleanup of backups older than 7 days...
+[2025-11-18 01:06:16] Cleanup completed. Removed 0 old backup file(s).
+[2025-11-18 01:06:16] PostgreSQL Backup Script Completed Successfully
+[2025-11-18 01:06:16] ==========================================
+[2025-11-18 02:00:01] ==========================================
+[2025-11-18 02:00:01] PostgreSQL Backup Script Started
+[2025-11-18 02:00:01] ==========================================
+[2025-11-18 02:00:01] Hostname: DESKTOP-538KG2U
+[2025-11-18 02:00:01] Database: production_db
+[2025-11-18 02:00:01] Backup Directory: /home/raabelgas/Laboratory Exercises/Lab8/backups
+[2025-11-18 02:00:01] PostgreSQL server is accessible and ready
+[2025-11-18 02:00:01] ===== Starting Logical Backup (pg_dump) =====
+[2025-11-18 02:00:01] Database: production_db
+[2025-11-18 02:00:01] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/production_db_2025-11-18-020001.dump
+[2025-11-18 02:00:02] SUCCESS: Logical backup completed successfully
+[2025-11-18 02:00:02] Backup file size: 12K
+[2025-11-18 02:00:02] ===== Starting Physical Base Backup (pg_basebackup) =====
+[2025-11-18 02:00:02] Output file: /home/raabelgas/Laboratory Exercises/Lab8/backups/pg_base_backup_2025-11-18-020001.tar.gz
+[2025-11-18 02:00:04] SUCCESS: Physical backup completed successfully
+[2025-11-18 02:00:04] Backup file size: 4.1M
+[2025-11-18 02:00:04] All backups completed successfully. Proceeding to cloud upload...
+[2025-11-18 02:00:04] ===== Starting Cloud Upload to Google Drive =====
+[2025-11-18 02:00:04] Remote: gdrive_backups:postgresql_backups
+[2025-11-18 02:00:04] Uploading logical backup: Laboratory
+[2025-11-18 02:00:11] SUCCESS: Logical backup uploaded to Google Drive
+[2025-11-18 02:00:11] Uploading physical backup: Laboratory
+[2025-11-18 02:05:15] SUCCESS: Physical backup uploaded to Google Drive
+[2025-11-18 02:05:15] ===== ALL TASKS COMPLETED SUCCESSFULLY =====
+[2025-11-18 02:05:15] Email notification sent successfully: SUCCESS: PostgreSQL Backup and Upload
+[2025-11-18 02:05:15] Starting cleanup of backups older than 7 days...
+[2025-11-18 02:05:15] Cleanup completed. Removed 0 old backup file(s).
+[2025-11-18 02:05:15] PostgreSQL Backup Script Completed Successfully
+[2025-11-18 02:05:15] ==========================================
