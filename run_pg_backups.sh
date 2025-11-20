@@ -10,12 +10,31 @@ set -e          # Exit immediately if a command exits with a non-zero status
 set -o pipefail # Pipeline fails if any command in the pipeline fails
 
 ################################################################################
+# ENVIRONMENT SETUP FOR CRON
+################################################################################
+
+# Set proper PATH for cron environment
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin
+
+# Set HOME if not set (cron might not set it)
+export HOME=${HOME:-/home/raabelgas}
+
+# Ensure we're in the script directory
+cd "$(dirname "$0")" || exit 1
+
+# Source profile if it exists (for any custom environment variables)
+if [ -f "$HOME/.profile" ]; then
+    . "$HOME/.profile"
+fi
+
+################################################################################
 # CONFIGURATION SECTION - Modify these variables as needed
 ################################################################################
 
 # Directories
 HOSTNAME=$(hostname)
-BACKUP_BASE_DIR="/home/$USER/Laboratory Exercises/Lab8"
+SCRIPT_USER="${USER:-raabelgas}"
+BACKUP_BASE_DIR="/home/${SCRIPT_USER}/Laboratory Exercises/Lab8"
 BACKUP_DIR="${BACKUP_BASE_DIR}/backups"
 LOG_FILE="/var/log/pg_backup.log"
 
@@ -65,12 +84,40 @@ send_email() {
     local SUBJECT="$1"
     local BODY="$2"
     
-    echo "${BODY}" | mail -s "${SUBJECT}" -r "${EMAIL_FROM}" "${EMAIL_RECIPIENT}" 2>&1 | tee -a "${LOG_FILE}"
+    # Create a temporary file for the email body
+    local TEMP_EMAIL="/tmp/backup_email_$$.txt"
     
-    if [ ${PIPESTATUS[0]} -eq 0 ]; then
+    # Write email in proper format
+    cat > "${TEMP_EMAIL}" << EOF_EMAIL
+To: ${EMAIL_RECIPIENT}
+From: ${EMAIL_FROM}
+Subject: ${SUBJECT}
+
+${BODY}
+EOF_EMAIL
+    
+    # Send using sendmail with explicit path (more reliable in cron)
+    if /usr/sbin/sendmail -t < "${TEMP_EMAIL}" 2>&1 | tee -a "${LOG_FILE}"; then
         log_message "Email notification sent successfully: ${SUBJECT}"
+        rm -f "${TEMP_EMAIL}"
+        return 0
     else
-        log_message "WARNING: Failed to send email notification"
+        log_message "WARNING: Failed to send email via sendmail"
+        
+        # Try alternative method with mail command and full headers
+        if echo "${BODY}" | /usr/bin/mail -s "${SUBJECT}" -a "From: ${EMAIL_FROM}" "${EMAIL_RECIPIENT}" 2>&1 | tee -a "${LOG_FILE}"; then
+            log_message "Email sent successfully via mail command"
+            rm -f "${TEMP_EMAIL}"
+            return 0
+        else
+            log_message "ERROR: Both sendmail and mail failed"
+            
+            # Create notification file as backup
+            local NOTIFICATION_FILE="${BACKUP_DIR}/email_notification_$(date +%Y%m%d_%H%M%S).txt"
+            mv "${TEMP_EMAIL}" "${NOTIFICATION_FILE}"
+            log_message "Email content saved to: ${NOTIFICATION_FILE}"
+            return 1
+        fi
     fi
 }
 
@@ -119,43 +166,26 @@ perform_logical_backup() {
 perform_physical_backup() {
     log_message "===== Starting Physical Base Backup (pg_basebackup) ====="
     log_message "Output file: ${PHYSICAL_BACKUP_FILE}"
-    
-    # Create a temporary directory for the base backup
-    local TEMP_BACKUP_DIR="${BACKUP_DIR}/pg_base_backup_temp_${TIMESTAMP}"
-    
-    # Perform base backup to directory, then tar and compress it
-    if pg_basebackup -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -D "${TEMP_BACKUP_DIR}" -Ft -z -Z 9 -P 2>&1 | tee -a "${LOG_FILE}"; then
-        # Move the backup files to final location
-        # pg_basebackup with -Ft creates base.tar.gz and pg_wal.tar.gz
-        if [ -f "${TEMP_BACKUP_DIR}/base.tar.gz" ]; then
-            mv "${TEMP_BACKUP_DIR}/base.tar.gz" "${PHYSICAL_BACKUP_FILE}"
-            
-            # Also handle WAL archive if it exists
-            if [ -f "${TEMP_BACKUP_DIR}/pg_wal.tar.gz" ]; then
-                local WAL_FILE="${BACKUP_DIR}/pg_wal_backup_${TIMESTAMP}.tar.gz"
-                mv "${TEMP_BACKUP_DIR}/pg_wal.tar.gz" "${WAL_FILE}"
-                log_message "WAL archive saved to: ${WAL_FILE}"
-            fi
-            
-            # Clean up temp directory
-            rm -rf "${TEMP_BACKUP_DIR}"
-            
-            local FILE_SIZE=$(du -h "${PHYSICAL_BACKUP_FILE}" | cut -f1)
-            log_message "SUCCESS: Physical backup completed successfully"
-            log_message "Backup file size: ${FILE_SIZE}"
-            return 0
-        else
-            log_message "ERROR: Backup files not found in temporary directory"
-            rm -rf "${TEMP_BACKUP_DIR}"
-            return 1
-        fi
+
+    if pg_basebackup \
+        -h "${DB_HOST}" \
+        -p "${DB_PORT}" \
+        -U "${DB_USER}" \
+        -F t \
+        -X none \
+        -D - 2>> "${LOG_FILE}" \
+        | gzip > "${PHYSICAL_BACKUP_FILE}"; then
+
+        local FILE_SIZE=$(du -h "${PHYSICAL_BACKUP_FILE}" | cut -f1)
+        log_message "SUCCESS: Physical backup completed successfully"
+        log_message "Backup file size: ${FILE_SIZE}"
+        return 0
     else
         log_message "ERROR: Physical backup failed"
-        rm -rf "${TEMP_BACKUP_DIR}" 2>/dev/null
+        rm -f "${PHYSICAL_BACKUP_FILE}"
         return 1
     fi
 }
-
 ################################################################################
 # FUNCTION: upload_to_cloud
 # Purpose: Uploads backup files to Google Drive using rclone
@@ -267,27 +297,30 @@ if [ ${BACKUP_FAILED} -eq 1 ]; then
     log_message "Failed Task: ${FAILED_TASK}"
     
     # Prepare failure email
-    FAILURE_EMAIL_BODY="PostgreSQL Backup Task Failed
+    FAILURE_EMAIL_BODY="FAILURE: PostgreSQL Backup Task
 
-Failed Task: ${FAILED_TASK}
+The backup process encountered an error.
+
+Failed Backup Type:
+${FAILED_TASK}
+
 Database: ${DB_NAME}
-Hostname: ${HOSTNAME}
+Server: ${HOSTNAME}
 Timestamp: $(date)
 
-Error Details:
-The ${FAILED_TASK} process encountered an error and did not complete successfully.
+Summary:
+The ${FAILED_TASK} did NOT complete successfully.  
+No upload to Google Drive was attempted.
 
-Last 15 lines from backup log:
+Error Context (Last 15 log lines):
 $(tail -n 15 "${LOG_FILE}")
 
-Action Required:
-1. Review the error details above
-2. Check PostgreSQL server status
-3. Verify disk space availability
-4. Check database permissions
-5. Review full log at: ${LOG_FILE}
-
-Please investigate and resolve this issue immediately."
+Next Steps:
+- Review the detailed error log: ${LOG_FILE}
+- Check PostgreSQL server status and user permissions
+- Confirm available disk space
+- Re-run the backup manually after resolving the issue
+"
     
     send_email "FAILURE: PostgreSQL Backup Task" "${FAILURE_EMAIL_BODY}"
     
@@ -305,31 +338,25 @@ if ! upload_to_cloud; then
     log_message "===== UPLOAD FAILED ====="
     
     # Prepare upload failure email
-    UPLOAD_FAILURE_EMAIL_BODY="PostgreSQL Backup Upload Failed
+    UPLOAD_FAILURE_EMAIL_BODY="FAILURE: PostgreSQL Backup Upload
+
+Backups were created locally but failed to upload to Google Drive.
 
 Database: ${DB_NAME}
-Hostname: ${HOSTNAME}
+Server: ${HOSTNAME}
 Timestamp: $(date)
 
-Status:
-✓ Backups were created successfully locally
-✗ Upload to Google Drive failed
-
 Local Backup Files:
-- ${LOGICAL_BACKUP_FILE}
-- ${PHYSICAL_BACKUP_FILE}
+- $(basename ${LOGICAL_BACKUP_FILE})
+- $(basename ${PHYSICAL_BACKUP_FILE})
 
-Action Required:
-1. Check rclone configuration and credentials
-2. Verify Google Drive API access
-3. Check network connectivity
-4. Review rclone logs for detailed error messages
-5. Manually upload backups if necessary
+Error:
+Backups were created successfully but Google Drive upload using rclone failed.
+Check rclone logs and cloud storage configuration.
 
-Note: Local backups are available but were not uploaded to cloud storage.
-
-Last 15 lines from log:
-$(tail -n 15 "${LOG_FILE}")"
+Error Context (Last 15 log lines):
+$(tail -n 15 "${LOG_FILE}")
+"
     
     send_email "FAILURE: PostgreSQL Backup Upload" "${UPLOAD_FAILURE_EMAIL_BODY}"
     
@@ -343,29 +370,34 @@ fi
 ################################################################################
 log_message "===== ALL TASKS COMPLETED SUCCESSFULLY ====="
 
-SUCCESS_EMAIL_BODY="PostgreSQL Backup and Upload Completed Successfully
+LOGICAL_BASENAME=$(basename "${LOGICAL_BACKUP_FILE}")
+PHYSICAL_BASENAME=$(basename "${PHYSICAL_BACKUP_FILE}")
+
+SUCCESS_EMAIL_BODY="SUCCESS: PostgreSQL Backup and Upload
+
+The backup and cloud upload completed successfully.
 
 Database: ${DB_NAME}
-Hostname: ${HOSTNAME}
+Server: ${HOSTNAME}
 Timestamp: $(date)
 
-Backup Files Created and Uploaded:
-✓ Logical Backup: $(basename ${LOGICAL_BACKUP_FILE})
-  Size: $(du -h "${LOGICAL_BACKUP_FILE}" | cut -f1)
+Uploaded Files:
+- ${LOGICAL_BASENAME}
+- ${PHYSICAL_BASENAME}
 
-✓ Physical Base Backup: $(basename ${PHYSICAL_BACKUP_FILE})
-  Size: $(du -h "${PHYSICAL_BACKUP_FILE}" | cut -f1)
+Status:
+✓ Logical backup created
+✓ Physical base backup created
+✓ Files uploaded to Google Drive (rclone)
 
-Cloud Storage Location:
+Cloud Destination:
 ${RCLONE_REMOTE}${RCLONE_DEST_PATH}/
 
-Next Actions:
-- Backups are stored locally and in Google Drive
-- Local backups older than ${RETENTION_DAYS} days will be removed
-- Next scheduled backup: Tomorrow at 2:00 AM
+Backup retention policy:
+Local backups older than ${RETENTION_DAYS} days will be removed automatically.
 
-Summary:
-All backup operations completed without errors. Database backups are secure and available for recovery if needed."
+No issues were encountered.
+"
 
 send_email "SUCCESS: PostgreSQL Backup and Upload" "${SUCCESS_EMAIL_BODY}"
 
